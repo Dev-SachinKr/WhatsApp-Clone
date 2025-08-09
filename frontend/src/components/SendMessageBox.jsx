@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+// Axios default base URL from env
+// axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
+
 const SendMessageBox = ({ wa_id, name, onMessageSent }) => {
   const [inputText, setInputText] = useState('');
 
