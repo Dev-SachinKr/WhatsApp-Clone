@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-
-// Axios default base URL from env
-// axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
+import api from '../utils/api'; // ✅ Custom axios instance with baseURL
 
 const SendMessageBox = ({ wa_id, name, onMessageSent }) => {
   const [inputText, setInputText] = useState('');
@@ -11,10 +8,9 @@ const SendMessageBox = ({ wa_id, name, onMessageSent }) => {
     if (!inputText.trim()) return;
 
     const payload = { wa_id, name, text: inputText };
-    // console.log('📨 Sending message:', payload);
 
     try {
-      await axios.post('/api/messages', payload);
+      await api.post('/api/messages', payload); // ✅ Using custom axios instance
       setInputText('');
       onMessageSent();
     } catch (error) {

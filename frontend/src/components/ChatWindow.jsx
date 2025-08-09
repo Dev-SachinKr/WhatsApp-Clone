@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import api from '../utils/api';
 
 const ChatWindow = ({ selectedChat, reloadTrigger }) => {
   const [messages, setMessages] = useState([]);
@@ -8,18 +9,22 @@ const ChatWindow = ({ selectedChat, reloadTrigger }) => {
   useEffect(() => {
     if (!selectedChat) return;
 
-    setLoading(true);
-    fetch(`/api/messages/${selectedChat}`)
-      .then(res => res.json())
-      .then(data => {
-        setMessages(data);
-        setLoading(false);
-        setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
-      })
-      .catch(err => {
+    const fetchMessages = async () => {
+      setLoading(true);
+      try {
+        const res = await api.get(`/api/messages/${selectedChat}`);
+        setMessages(res.data);
+      } catch (err) {
         console.error('Error fetching messages:', err);
+      } finally {
         setLoading(false);
-      });
+        setTimeout(() => {
+          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    };
+
+    fetchMessages();
   }, [selectedChat, reloadTrigger]);
 
   const renderStatusIcon = (status) => {
@@ -27,38 +32,20 @@ const ChatWindow = ({ selectedChat, reloadTrigger }) => {
     switch (status) {
       case 'sent':
         return (
-          <svg
-            className={`${commonClasses} text-gray-500`}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-          >
+          <svg className={`${commonClasses} text-gray-500`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path d="M5 13l4 4L19 7" />
           </svg>
         );
       case 'delivered':
         return (
-          <svg
-            className={`${commonClasses} text-gray-500`}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-          >
+          <svg className={`${commonClasses} text-gray-500`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path d="M3 13l4 4L17 7" />
             <path d="M9 13l4 4L21 7" />
           </svg>
         );
       case 'read':
         return (
-          <svg
-            className={`${commonClasses} text-blue-500`}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-          >
+          <svg className={`${commonClasses} text-blue-500`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path d="M3 13l4 4L17 7" />
             <path d="M9 13l4 4L21 7" />
           </svg>

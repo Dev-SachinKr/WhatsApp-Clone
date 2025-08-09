@@ -2,18 +2,24 @@ import React, { useState, useEffect } from 'react';
 import ChatList from './components/ChatList';
 import ChatWindow from './components/ChatWindow';
 import SendMessageBox from './components/SendMessageBox';
+import api from './utils/api';
 
 const App = () => {
   const [chats, setChats] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   const [reloadMessages, setReloadMessages] = useState(false);
 
-  // Fetch chats
   useEffect(() => {
-    fetch('/api/chats')
-      .then(res => res.json())
-      .then(data => setChats(data))
-      .catch(err => console.error('Error fetching chats:', err));
+    const fetchChats = async () => {
+      try {
+        const res = await api.get('/api/chats');
+        setChats(res.data);
+      } catch (err) {
+        console.error('Error fetching chats:', err);
+      }
+    };
+
+    fetchChats();
   }, [reloadMessages]);
 
   const handleChatSelect = (wa_id) => {
@@ -32,7 +38,6 @@ const App = () => {
 
   return (
     <div className="h-screen flex flex-col md:flex-row bg-gray-100">
-      {/* Sidebar - Chat List */}
       <aside className="md:w-1/3 border-r border-gray-300 overflow-y-auto bg-white shadow-lg">
         <ChatList
           chats={chats}
@@ -41,7 +46,6 @@ const App = () => {
         />
       </aside>
 
-      {/* Main Chat Area */}
       <main className="flex flex-col flex-1 bg-white">
         <ChatWindow
           selectedChat={selectedChat?.wa_id}
