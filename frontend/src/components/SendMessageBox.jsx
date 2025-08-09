@@ -11,7 +11,7 @@ const SendMessageBox = ({ wa_id, name, onMessageSent }) => {
     if (!inputText.trim()) return;
 
     const payload = { wa_id, name, text: inputText };
-    console.log('📨 Sending message:', payload);
+    // console.log('📨 Sending message:', payload);
 
     try {
       await axios.post('/api/messages', payload);
