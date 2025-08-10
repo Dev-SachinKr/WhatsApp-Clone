@@ -1,6 +1,6 @@
 # WhatsApp Clone (Web Interface)
 
-A full-stack WhatsApp-style chat interface built with **React**, **Node.js**, and **MongoDB**, that supports two-way messaging, message status tracking (sent/delivered/read), and automatic webhook-based message ingestion.
+A full-stack WhatsApp-style chat interface built with **React**, **Node.js**, and **MongoDB**,  message status tracking (sent/delivered/read), and automatic webhook-based message ingestion.
 
 ---
 
